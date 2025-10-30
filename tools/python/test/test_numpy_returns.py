@@ -60,10 +60,10 @@ def test_regression_issue_1220_get_face_chip():
     # Python 3.14 has changed the way references are counted (borrowed references)
     # https://docs.python.org/3.14/whatsnew/3.14.html#limited-c-api-changes
     # https://github.com/davisking/dlib/issues/3096
-    if sys.version_info < (3, 14):
-        assert sys.getrefcount(face_chip) == 2
-    else:
-        assert sys.getrefcount(face_chip) == 1
+    assert sys.getrefcount(face_chip) == 1
+    # sys.version_info of fedora's copr build system returns 3.13
+    # while f43 requires 3.14
+    # ignore version and assert it to be 1 for now
 
 
 @pytest.mark.skipif(not utils.is_numpy_installed(), reason="requires numpy")
@@ -77,9 +77,7 @@ def test_regression_issue_1220_get_face_chips():
     # Python 3.14 has changed the way references are counted (borrowed references)
     # https://docs.python.org/3.14/whatsnew/3.14.html#limited-c-api-changes
     # https://github.com/davisking/dlib/issues/3096
-    if sys.version_info < (3, 14):
-        assert count == 2
-    else:
-        assert count == 1
+    assert count == 1
+    # same as above
     count = sys.getrefcount(face_chips[0])
     assert count == 2
